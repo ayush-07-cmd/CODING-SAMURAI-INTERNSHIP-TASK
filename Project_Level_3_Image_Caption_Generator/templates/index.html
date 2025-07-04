@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Image Caption Generator</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <h1>📸 AI Caption Generator</h1>
+    <p class="subtitle">Designed & Developed by Ayush Kumar Sharma ✨👨‍💻</p>
+
+    <form method="POST" enctype="multipart/form-data">
+      <label class="upload-btn">
+        Choose Image
+        <input type="file" name="image" accept="image/*" onchange="this.form.submit();">
+      </label>
+    </form>
+
+    {% if image_path %}
+      <img src="{{ image_path }}" alt="Uploaded Image">
+    {% endif %}
+
+    {% if caption %}
+      <div class="caption">
+        <strong>Caption:</strong> {{ caption }}
+      </div>
+    {% endif %}
+  </div>
+
+  <footer>
+    © 2025 Ayush Kumar Sharma | All rights reserved
+  </footer>
+</body>
+</html>
