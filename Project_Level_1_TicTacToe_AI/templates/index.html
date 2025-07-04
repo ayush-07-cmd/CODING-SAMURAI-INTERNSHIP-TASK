@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tic Tac Toe AI</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <h1>Tic Tac Toe AI</h1>
+  <div id="board"></div>
+  <p id="status"></p>
+  <button onclick="resetGame()">Restart</button>
+
+  <script>
+    let board = Array(9).fill(0);
+
+    function renderBoard() {
+      const boardDiv = document.getElementById("board");
+      boardDiv.innerHTML = "";
+      board.forEach((cell, index) => {
+        const box = document.createElement("div");
+        box.className = "cell";
+        box.innerText = cell === 1 ? "X" : cell === 2 ? "O" : "";
+        box.onclick = () => makeMove(index);
+        boardDiv.appendChild(box);
+      });
+    }
+
+    function makeMove(index) {
+      if (board[index] !== 0) return;
+      board[index] = 1;
+      fetch("/move", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ board }),
+      })
+      .then(res => res.json())
+      .then(data => {
+        board = data.board;
+        renderBoard();
+        if (data.status === "end") {
+          document.getElementById("status").innerText = data.winner
+            ? (data.winner === 1 ? "You Win!" : "AI Wins!")
+            : "It's a Tie!";
+        }
+      });
+    }
+
+    function resetGame() {
+      board = Array(9).fill(0);
+      document.getElementById("status").innerText = "";
+      renderBoard();
+    }
+
+    renderBoard();
+  </script>
+</body>
+</html>
